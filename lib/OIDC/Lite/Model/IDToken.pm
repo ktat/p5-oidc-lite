@@ -7,7 +7,7 @@ use base 'Class::Accessor::Fast';
 use Params::Validate;
 use OIDC::Lite::Util::JWT;
 use JSON::WebToken;
-use MIME::Base64 qw/encode_base64url decode_base64url/;
+use MIME::Base64;
 use Digest::SHA qw/sha256 sha384 sha512/;
 use constant HALF_BITS_DENOMINATOR => 2 * 8;
 use constant ALG_LEN => 2;
@@ -121,7 +121,7 @@ sub access_token_hash {
         my $len = $bit/HALF_BITS_DENOMINATOR;
         my $sha = Digest::SHA->new($bit);
         $sha->add($access_token_string);
-        $self->payload->{at_hash} = encode_base64url(substr($sha->digest, 0, $len));
+        $self->payload->{at_hash} = MIME::Base64::encode_base64url(substr($sha->digest, 0, $len));
     }
 }
 
@@ -142,7 +142,7 @@ sub code_hash {
         my $len = $bit/HALF_BITS_DENOMINATOR;
         my $sha = Digest::SHA->new($bit);
         $sha->add($authorization_code);
-        $self->payload->{c_hash} = encode_base64url(substr($sha->digest, 0, $len));
+        $self->payload->{c_hash} = MIME::Base64::encode_base64url(substr($sha->digest, 0, $len));
     }
 }
 

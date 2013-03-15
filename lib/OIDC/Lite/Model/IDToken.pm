@@ -122,7 +122,8 @@ sub access_token_hash {
         my $sha = Digest::SHA->new($bit);
         $sha->add($access_token_string);
         my $at_hash = MIME::Base64::encode_base64(substr($sha->digest, 0, $len), '');
-        $at_hash =~ tr{+/}{-_};
+        $at_hash =~ s/=+\z//;
+        $at_hash =~ tr[+/][-_];
         $self->payload->{at_hash} = $at_hash;
     }
 }
@@ -145,7 +146,8 @@ sub code_hash {
         my $sha = Digest::SHA->new($bit);
         $sha->add($authorization_code);
         my $c_hash = MIME::Base64::encode_base64(substr($sha->digest, 0, $len), '');
-        $c_hash =~ tr{+/}{-_};
+        $c_hash =~ s/=+\z//;
+        $c_hash =~ tr[+/][-_];
         $self->payload->{c_hash} = $c_hash;
     }
 }

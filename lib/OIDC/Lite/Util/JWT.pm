@@ -49,7 +49,8 @@ sub header {
     my ($header_segment, $payload_segment, $crypt_segment) = @$segments;
     my $header;
     try {
-        $header = decode_json(MIME::Base64::decode_base64url($header_segment));
+        $header_segment =~ tr{-_}{+/};
+        $header = decode_json(MIME::Base64::decode_base64($header_segment));
     } catch {
         return {} if defined $_;
         return $header;
@@ -74,7 +75,8 @@ sub payload {
     my ($header_segment, $payload_segment, $crypt_segment) = @$segments;
     my $payload;
     try {
-        $payload = decode_json(MIME::Base64::decode_base64url($payload_segment));
+        $payload_segment =~ tr{-_}{+/};
+        $payload = decode_json(MIME::Base64::decode_base64($payload_segment));
     } catch {
         return {} if defined $_;
         return $payload;

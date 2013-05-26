@@ -169,6 +169,36 @@ If it's OK, return 1. Return 0 if not.
 Validation of prompt param.
 If it's OK, return 1. Return 0 if not.
 
+=head2 validate_max_age( $aram )
+
+Validation of max_age param.
+If it's OK, return 1. Return 0 if not.
+
+=head2 validate_ui_locales_( $ui_locales )
+
+Validation of ui_locales param.
+If it's OK, return 1. Return 0 if not.
+
+=head2 validate_claims_locales_( $claims_locales )
+
+Validation of claims_locales param.
+If it's OK, return 1. Return 0 if not.
+
+=head2 validate_id_token_hint( $param )
+
+Validation of id_token_hint param.
+If it's OK, return 1. Return 0 if not.
+
+=head2 validate_login_hint( $param )
+
+Validation of login_hint param.
+If it's OK, return 1. Return 0 if not.
+
+=head2 validate_acr_values( $param 
+
+Validation of acr_values param.
+If it's OK, return 1. Return 0 if not.
+
 =head2 validate_request( $param )
 
 Validation of request param.

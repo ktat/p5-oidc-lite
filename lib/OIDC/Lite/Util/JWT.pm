@@ -5,8 +5,8 @@ use warnings;
 
 use Try::Tiny;
 use Params::Validate;
-use JSON::XS qw/decode_json encode_json/;
-use MIME::Base64;
+use JSON qw/decode_json encode_json/;
+use MIME::Base64 qw/encode_base64url decode_base64url/;
 
 use constant {
     JWT_ALG_LEN     => 2,
@@ -49,9 +49,7 @@ sub header {
     my ($header_segment, $payload_segment, $crypt_segment) = @$segments;
     my $header;
     try {
-        $header_segment =~ s/=+\z//;
-        $header_segment =~ tr[-_][+/];
-        $header = decode_json(MIME::Base64::decode_base64($header_segment));
+        $header = decode_json(decode_base64url($header_segment));
     } catch {
         return {} if defined $_;
         return $header;
@@ -76,9 +74,7 @@ sub payload {
     my ($header_segment, $payload_segment, $crypt_segment) = @$segments;
     my $payload;
     try {
-        $payload_segment =~ s/=+\z//;
-        $payload_segment =~ tr[-_][+/];
-        $payload = decode_json(MIME::Base64::decode_base64($payload_segment));
+        $payload = decode_json(decode_base64url($payload_segment));
     } catch {
         return {} if defined $_;
         return $payload;

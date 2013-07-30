@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More tests => 12;
 
 use lib 't/lib';
 use TestPR;
@@ -39,7 +39,6 @@ sub request {
 
 my ($req, $res);
 # LEGACY
-# success response
 $req = HTTP::Request->new("GET" => q{http://example.org/});
 $req->header("Authorization" => sprintf(q{OAuth %s}, $access_token->token));
 $res = &request($req);
@@ -58,17 +57,7 @@ $res = &request($req);
 ok($res->is_success, 'request should not fail');
 is($res->content, q{{user: '1', scope: 'email', claims: ["user_id","email"], is_legacy: '1'}}, 'successful response');
 
-# error response
-# success response
-$req = HTTP::Request->new("GET" => q{http://example.org/});
-$req->header("Authorization" => q{OAuth });
-$res = &request($req);
-ok(!$res->is_success, 'request should fail');
-is($res->code, 400, 'invalid access token');
-is($res->header("WWW-Authenticate"), q{OAuth error='invalid_request',realm='resource.example.org'}, 'invalid request');
-
 # RFC
-# success response
 $req = HTTP::Request->new("GET" => q{http://example.org/});
 $req->header("Authorization" => sprintf(q{Bearer %s}, $access_token->token));
 $res = &request($req);
@@ -87,11 +76,3 @@ $res = &request($req);
 ok($res->is_success, 'request should not fail');
 is($res->content, q{{user: '1', scope: 'email', claims: ["user_id","email"], is_legacy: '0'}}, 'successful response');
 
-# error response
-# success response
-$req = HTTP::Request->new("GET" => q{http://example.org/});
-$req->header("Authorization" => q{Bearer });
-$res = &request($req);
-ok(!$res->is_success, 'request should fail');
-is($res->code, 400, 'invalid request');
-is($res->header("WWW-Authenticate"), q{Bearer realm="resource.example.org", error="invalid_request"}, 'invalid request');
